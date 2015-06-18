@@ -1,0 +1,130 @@
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="col-md-2 control-label">帐号<span style="color:#f00"> * </span>:</label>
+        <div class="col-md-3"><input type="text" name="ad_username" class="form-control" maxlength="20" value="" ></div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">密码<span style="color:#f00"> * </span>:</label>
+        <div class="col-md-3"><input type="text" name="ad_password" class="form-control" maxlength="20" value="" ></div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">状态:</label>
+        <div class="col-md-3">
+            <input type="checkbox" name="ad_status" checked />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">管理员组:</label>
+        <div class="col-md-3">
+            <select class="form-control" name="adg_id">
+                <option value="0">无</option>
+                <{if is_foreach($adg_list)}>
+                <{foreach item=adg_val from=$adg_list}>
+                <option value="<{$adg_val.adg_id}>"><{$adg_val.adg_name}></option>
+                <{/foreach}>
+                <{/if}>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">姓名:</label>
+        <div class="col-md-3"><input type="text" name="ai_name" class="form-control" maxlength="20" value="" ></div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">笔名(昵称):</label>
+        <div class="col-md-3"><input type="text" name="ai_nickname" class="form-control" maxlength="20" value="" ></div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">手机:</label>
+        <div class="col-md-3"><input type="text" name="ai_phone" class="form-control" maxlength="11" value="" ></div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">邮箱:</label>
+        <div class="col-md-3"><input type="text" name="ai_email" class="form-control" maxlength="50" value="" ></div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">权限:</label>
+        <div class="col-sm-8 col-md-8">
+            <{if is_foreach($purview)}>
+            <{foreach item=pv_list from=$purview}>
+            <label><input type="checkbox" name="pv_ids[]" value="<{$pv_list.pv_id}>" ><{$pv_list.pv_name}></label>
+            <{/foreach}>
+            <{/if}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">权限组:</label>
+        <div class="col-sm-8 col-md-8">
+            <{if is_foreach($purview_group)}>
+            <{foreach item=pvg_list from=$purview_group}>
+            <label><input type="checkbox" name="pvg_ids[]" value="<{$pvg_list.pvg_id}>" ><{$pvg_list.pvg_name}></label>
+            <{/foreach}>
+            <{/if}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label"></label>
+        <div class="col-md-3">
+            <button adm="submit" class="btn btn-primary" data-loading-text="Loading..." >&nbsp;&nbsp;&nbsp;确&nbsp;&nbsp;定&nbsp;&nbsp;&nbsp;</button>
+        </div>
+    </div>
+</div>
+<script>
+    CLS_FORM.init({req:'sys-admin', add:'sys-admin-add', del:'sys-admin-del', edit:'sys-admin-edit'});
+    $('input[name="ad_status"]').bootstrapSwitch({'onText':'启用', 'offText':'停用'});
+    $('button[adm="submit"]').on('click', function(){
+        var _data = {'o':'save'};
+        _data['a'] = 'sys-admin-add';
+        _data['ad_username'] = $('input[name="ad_username"]').val();
+        _data['ad_password'] = $('input[name="ad_password"]').val();
+        _data['ad_status'] = $('input[name="ad_status"]:checked').val();
+        _data['ad_status'] = typeof(_data['ad_status']) == 'undefined' ? 2 : 1;
+        _data['adg_id'] = $('select[name="adg_id"] option:selected').val();
+        _data['ai_name']  = $('input[name="ai_name"]').val();
+        _data['ai_nickname']  = $('input[name="ai_nickname"]').val();
+        _data['ai_phone'] = $('input[name="ai_phone"]').val();
+        _data['ai_email'] = $('input[name="ai_email"]').val();
+        _data['pv_ids'] = _data['pvg_ids'] = '';
+        $('input[name^="pv_ids"]:checked').each(function(){
+            _data['pv_ids'] += $(this).val()+',';
+        });
+        $('input[name^="pvg_ids"]:checked').each(function(){
+            _data['pvg_ids'] += $(this).val()+',';
+        });
+        if(_data['ad_username'] == ''){
+            CLS_NOTICE.show_tip('帐号不能为空');
+            return false;
+        }
+        if(!FUN_G.check_data(_data['ad_username'], 'username')){
+            CLS_NOTICE.show_tip('帐号格式错误');
+            return false;
+        }
+        if(_data['ad_password'] == ''){
+            CLS_NOTICE.show_tip('密码不能为空');
+            return false;
+        }
+        if(_data['ai_phone'] != '' && _data['ai_phone'] != '0' && !FUN_G.check_data(_data['ai_phone'], 'mobile')){
+            CLS_NOTICE.show_tip('手机号错误');
+            return false;
+        }
+        if(_data['ai_email'] != '' && !FUN_G.check_data(_data['ai_email'], 'email')){
+            CLS_NOTICE.show_tip('邮箱错误');
+            return false;
+        }
+        var this_btn = $(this).button('loading');
+        CLS_GLOBAL.set_url(_ADMIN_FILE).
+        set_data(_data).
+        set_call(function(_res){
+            CLS_NOTICE.hide_loading();
+            if(typeof(_res.r) != 'undefined' && _res.r == 1){
+                CLS_NOTICE.show_tip({text:(typeof(_res.m) != 'undefined' ? _res.m:"操作成功!"),timeout: 5000, type:'success'});
+                CLS_FORM.to_list();
+            }else{
+                CLS_NOTICE.show_tip({text:(typeof(_res.m) != 'undefined' ? _res.m:"操作异常!"),timeout: 5000});
+            }
+            this_btn.button('reset');
+        }).
+        set_call_bf(function(_res){CLS_NOTICE.show_loading();}).
+        set_call_er(function(_res){CLS_NOTICE.hide_loading();this_btn.button('reset');CLS_NOTICE.show_tip({text:(typeof(_res.m) != 'undefined' ? _res.m:"操作异常!"),timeout: 5000});}).send();
+    });
+</script>

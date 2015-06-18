@@ -1,0 +1,34 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>操作者</th>
+                <th>结果</th>
+                <th>内容</th>
+                <th>操作时间</th>
+                <th>操作IP</th>
+            </tr>
+        </thead>
+        <tbody>
+            <{if is_foreach($admin_log)}>
+            <{foreach item=item from=$admin_log}>
+            <tr>
+                <td><{$item.al_id}></td>
+                <td><{if $item.ai_name == ''}><{$item.ad_username}><{else}><{$item.ai_name}><{/if}></td>
+                <td><{if $item.al_result == 1}><span class="btn btn-success btn-sm" disabled="disabled">成功</span><{else}><span class="btn btn-danger btn-sm" disabled="disabled">失败</span><{/if}></td>
+                <td><{$item.al_content}></td>
+                <td><{$item.al_lasttime|date_format:"%Y/%m/%d %H:%M"}></td>
+                <td><{$item.al_lastip|long_ip}></td>
+            </tr>
+            <{/foreach}>
+            <{else}>
+                <tr><td colspan="15" align="center">暂无数据</td></tr>
+            <{/if}>
+        </tbody>
+    </table>
+<{include file="page.html"}>
+</div>
+<script>
+    CLS_FORM.init({req:'sys-admin_log', add:'sys-admin_log-add', del:'sys-admin_log-del', edit:'sys-admin_log-edit'});
+</script>

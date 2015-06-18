@@ -1,0 +1,66 @@
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="col-md-2 control-label">名称:</label>
+        <div class="col-md-3"><input type="text" name="pvg_name" class="form-control" maxlength="50" value="" ></div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">状态:</label>
+        <div class="col-md-3">
+            <input type="checkbox" name="pvg_status" checked />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">权限:</label>
+        <div class="col-sm-8 col-md-8">
+            <{if is_foreach($purview)}>
+            <{foreach item=pv_list from=$purview}>
+            <label><input type="checkbox" name="pv_ids[]" value="<{$pv_list.pv_id}>" ><{$pv_list.pv_name}></label>
+            <{/foreach}>
+            <{/if}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label"></label>
+        <div class="col-md-3">
+            <button adm="submit" class="btn btn-primary" data-loading-text="Loading..." >&nbsp;&nbsp;&nbsp;确&nbsp;&nbsp;定&nbsp;&nbsp;&nbsp;</button>
+        </div>
+    </div>
+</div>
+<script>
+    CLS_FORM.init({req:'sys-purview_group', add:'sys-purview_group-add', del:'sys-purview_group-del', edit:'sys-purview_group-edit'});
+    $('input[name="pvg_status"]').bootstrapSwitch({'onText':'启用', 'offText':'停用'});
+    $('button[adm="submit"]').on('click', function(){
+        var _data = {'o':'save'};
+        _data['a'] = 'sys-purview_group-add';
+        _data['pvg_name'] = $('input[name="pvg_name"]').val();
+        _data['pvg_status'] = $('input[name="pvg_status"]:checked').val();
+        _data['pvg_status'] = typeof(_data['pvg_status']) == 'undefined' ? 2 : 1;
+        _data['pv_ids'] = '';
+        $('input[name^="pv_ids"]:checked').each(function(){
+            _data['pv_ids'] += $(this).val()+',';
+        });
+        if(_data['pvg_name'] == ''){
+            CLS_NOTICE.show_tip('名称不能为空');
+            return false;
+        }
+        if(_data['pvg_key'] == ''){
+            CLS_NOTICE.show_tip('权限不能为空');
+            return false;
+        }
+        var this_btn = $(this).button('loading');
+        CLS_GLOBAL.set_url(_ADMIN_FILE).
+        set_data(_data).
+        set_call(function(_res){
+            CLS_NOTICE.hide_loading();
+            if(typeof(_res.r) != 'undefined' && _res.r == 1){
+                CLS_NOTICE.show_tip({text:(typeof(_res.m) != 'undefined' ? _res.m:"操作成功!"),timeout: 5000, type:'success'});
+                CLS_FORM.to_list();
+            }else{
+                CLS_NOTICE.show_tip({text:(typeof(_res.m) != 'undefined' ? _res.m:"操作异常!"),timeout: 5000});
+            }
+            this_btn.button('reset');
+        }).
+        set_call_bf(function(_res){CLS_NOTICE.show_loading();}).
+        set_call_er(function(_res){CLS_NOTICE.hide_loading();this_btn.button('reset');CLS_NOTICE.show_tip({text:(typeof(_res.m) != 'undefined' ? _res.m:"操作异常!"),timeout: 5000});}).send();
+    });
+</script>

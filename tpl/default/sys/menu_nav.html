@@ -1,0 +1,41 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-condensed table-hover">
+        <thead>
+            <tr role="row">
+                <th>操作</th>
+                <th>ID</th>
+                <th>名称</th>
+                <th>菜单地址</th>
+                <th>菜单类别</th>
+                <th>父导航ID</th>
+                <th>状态</th>
+                <th>修改时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            <{if is_foreach($menu_nav)}>
+            <{foreach item=item from=$menu_nav}>
+            <tr>
+                <td style="width:50px">
+                    <span class="glyphicon glyphicon-pencil pull-left" data="<{$item.mn_id}>" adm="edit" aria-hidden="true" role="button">&nbsp;</span>
+                    <span class="glyphicon glyphicon-trash pull-left" data="<{$item.mn_id}>" adm="del" aria-hidden="true" role="button"></span>
+                </td>
+                <td><{$item.mn_id}></td>
+                <td><{$item.mn_name}></td>
+                <td><{$item.mn_url}></td>
+                <td><{foreach item=n_type key=key from=$nav_types}><{if $key == $item.mn_type}><{$n_type}><{/if}><{/foreach}></td>
+                <td><{if $item.mn_pid == 0}>-<{else}><{$item.mn_pid}><{/if}></td>
+                <td><{if $item.mn_status == 1}><span class="btn btn-success btn-sm" disabled="disabled">启用</span><{else}><span class="btn btn-danger btn-sm" disabled="disabled">停用</span><{/if}></td>
+                <td><{$item.mn_lasttime|date_format:"%Y/%m/%d %H:%M"}></td>
+            </tr>
+            <{/foreach}>
+            <{else}>
+                <tr><td colspan="15" align="center">暂无数据</td></tr>
+            <{/if}>
+        </tbody>
+    </table>
+<{include file="page.html"}>
+</div>
+<script>
+    CLS_FORM.init({req:'sys-menu_nav', add:'sys-menu_nav-add', del:'sys-menu_nav-del', edit:'sys-menu_nav-edit'});
+</script>

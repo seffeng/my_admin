@@ -1,0 +1,45 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>操作</th>
+                <th>ID</th>
+                <th>用户名</th>
+                <th>管理员组</th>
+                <th>姓名</th>
+                <th>手机</th>
+                <th>邮箱</th>
+                <th>状态</th>
+                <th>添加时间</th>
+                <th>修改时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            <{if is_foreach($admin)}>
+            <{foreach item=item from=$admin}>
+            <tr>
+                <td style="width:50px">
+                    <span class="glyphicon glyphicon-pencil pull-left" data="<{$item.ad_id}>" adm="edit" aria-hidden="true" role="button">&nbsp;</span>
+                    <span class="glyphicon glyphicon-trash pull-left" data="<{$item.ad_id}>" adm="del" aria-hidden="true" role="button"></span>
+                </td>
+                <td><{$item.ad_id}></td>
+                <td><{$item.ad_username}></td>
+                <td><{$item.adg_name|default:"-"}></td>
+                <td><{$item.ai_name|default:"-"}></td>
+                <td><{$item.ai_phone|default:"-"}></td>
+                <td><{$item.ai_email|default:"-"}></td>
+                <td><{if $item.ad_status == 1}><span class="btn btn-success btn-sm" disabled="disabled">启用</span><{else}><span class="btn btn-danger btn-sm" disabled="disabled">停用</span><{/if}></td>
+                <td><{$item.ad_addtime|date_format:"%Y/%m/%d %H:%M"}></td>
+                <td><{$item.ad_lasttime|date_format:"%Y/%m/%d %H:%M"}></td>
+            </tr>
+            <{/foreach}>
+            <{else}>
+                <tr><td colspan="15" align="center">暂无数据</td></tr>
+            <{/if}>
+        </tbody>
+    </table>
+<{include file="page.html"}>
+</div>
+<script>
+    CLS_FORM.init({req:'sys-admin', add:'sys-admin-add', del:'sys-admin-del', edit:'sys-admin-edit'});
+</script>

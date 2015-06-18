@@ -1,0 +1,12 @@
+#notice {
+    position: fixed;
+    width: 100%;
+    z-index: 8889;
+}
+#notice .alert {
+    text-align: center;
+    margin-bottom: 0;
+}
+#nav_left {
+    min-height: 128px;
+}

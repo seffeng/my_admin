@@ -1,0 +1,37 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>操作</th>
+                <th>ID</th>
+                <th>组名</th>
+                <th>状态</th>
+                <th>最后时间</th>
+                <th>最后IP</th>
+            </tr>
+        </thead>
+        <tbody>
+            <{if is_foreach($list)}>
+            <{foreach item=item from=$list}>
+            <tr>
+                <td style="width:50px">
+                    <span class="glyphicon glyphicon-pencil" data="<{$item.adg_id}>" adm="edit" aria-hidden="true" role="button">&nbsp;</span>
+                    <span class="glyphicon glyphicon-trash pull-right" data="<{$item.adg_id}>" adm="del" aria-hidden="true" role="button"></span>
+                </td>
+                <td><{$item.adg_id}></td>
+                <td><{$item.adg_name}></td>
+                <td><{if $item.adg_status == 1}><span class="btn btn-success btn-sm" disabled="disabled">启用</span><{else}><span class="btn btn-danger btn-sm" disabled="disabled">停用</span><{/if}></td>
+                <td><{$item.adg_lasttime|date_format:"%Y/%m/%d %H:%M"}></td>
+                <td><{$item.adg_lastip|long_ip}></td>
+            </tr>
+            <{/foreach}>
+            <{else}>
+                <tr><td colspan="15" align="center">暂无数据</td></tr>
+            <{/if}>
+        </tbody>
+    </table>
+<{include file="page.html"}>
+</div>
+<script>
+    CLS_FORM.init({req:'sys-admin_group', add:'sys-admin_group-add', del:'sys-admin_group-del', edit:'sys-admin_group-edit'});
+</script>

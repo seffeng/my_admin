@@ -1,0 +1,27 @@
+<{if $page.pgmax > 1}>
+<div>
+    <ul class="pagination">
+        <li><span>共:<{$page.num}>条, <{$page.pgcur}>/<{$page.pgmax}> 页</span></li>
+        <li>
+            <span style="padding:1px 12px;">
+                <select class="form-control input-sm" id="pg_select" name="pg_select" >
+                    <{foreach from=$page['select'] item=item key=key}>
+                    <option value="<{$key}>"<{if $item == '1'}> selected="selected"<{/if}>><{$key}></option>
+                    <{/foreach}>
+                </select>
+            </span>
+        </li>
+        <li class="<{if $page.first == $page.pgcur}> disabled<{/if}>"><a href="javascript:;" adm="pg" pg="<{$page.first}>">首页</a></li>
+        <li class="<{if $page.prev < 1}> disabled<{/if}>"><a href="javascript:;" adm="pg" pg="<{$page.prev}>">上一页</a></li>
+        <{foreach from=$page['list'] item=item key=key}>
+        <{if $item == '1'}>
+        <li class="active"><span><{$key}></span></li>
+        <{else}>
+        <li><a href="javascript:;" adm="pg" pg="<{$key}>"><{$key}></a></li>
+        <{/if}>
+        <{/foreach}>
+        <li class="<{if $page.next < 1}> disabled<{/if}>"><a href="javascript:;" adm="pg" pg="<{$page.next}>">下一页</a></li>
+        <li class="<{if $page.end == $page.pgcur}> disabled<{/if}>"><a href="javascript:;" adm="pg" pg="<{$page.end}>">末页</a></li>
+    </ul>
+</div>
+<{/if}>
