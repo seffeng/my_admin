@@ -117,21 +117,11 @@ CREATE TABLE IF NOT EXISTS `ad_admin_log` (
   `al_lasttime` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后操作时间',
   `al_lastip` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '最后操作IP',
   PRIMARY KEY (`al_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='管理员日志表' AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='管理员日志表' AUTO_INCREMENT=1 ;
 
 --
 -- 转存表中的数据 `ad_admin_log`
 --
-
-INSERT INTO `ad_admin_log` (`al_id`, `ad_id`, `al_result`, `al_content`, `al_isdel`, `al_lasttime`, `al_lastip`) VALUES
-(1, 1, 1, '添加菜单[mn_name=管理员日志列表]', 0, 1434611303, 2130706433),
-(2, 1, 1, '修改管理员信息[ad_id=2][10001]', 0, 1434611990, 2130706433),
-(3, 1, 1, '修改管理员信息[adg_id=1][超级管理员]', 0, 1434612068, 2130706433),
-(4, 1, 1, '修改管理员信息[ad_id=2][10001]', 0, 1434612081, 2130706433),
-(5, 1, 1, '修改管理员信息[ad_id=2][10001]', 0, 1434612146, 2130706433),
-(6, 2, 1, '修改管理员信息[ad_id=2][10001]', 0, 1434612233, 2130706433),
-(7, 2, 1, '删除导航菜单[mn_id=15][权限列表]成功', 0, 1434612245, 2130706433),
-(8, 2, 1, '修改管理员信息[ad_id=2][10001]', 0, 1434612308, 2130706433);
 
 -- --------------------------------------------------------
 
